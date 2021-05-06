@@ -31,6 +31,10 @@ public class MemberController {
     public String create(MemberForm form){
         Member member = new Member();
         member.setName(form.getName());
+        member.setId(form.getId());
+        member.setPassword(form.getPassword());
+        member.setCountry(form.getContry());
+        member.setEmail(form.getEmail());
 
         memberService.join(member);
         return "redirect:/";
