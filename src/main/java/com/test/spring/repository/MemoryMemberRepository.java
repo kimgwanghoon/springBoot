@@ -8,18 +8,19 @@ import java.util.*;
 
 public class MemoryMemberRepository implements MemberRepository {
 
-    private static Map<Long,Member> store = new HashMap<>();    // 실무에서는 동시성문제가 있을수있어 공유되는 변수일 경우 컨커런트해쉬맵(ConcurrentHashMap) 사용해야함
+    private static Map<String,Member> store = new HashMap<>();    // 실무에서는 동시성문제가 있을수있어 공유되는 변수일 경우 컨커런트해쉬맵(ConcurrentHashMap) 사용해야함
     private  static long sequence =0L;
 
     @Override
     public Member save(Member member) {
-        member.setId(++sequence);
+        sequence++;
+        member.setId("kkhq"+sequence);
         store.put(member.getId(),member);
         return member;
     }
 
     @Override
-    public Optional<Member> findById(Long id) {
+    public Optional<Member> findById(String id) {
         return Optional.of(store.get(id));  //null이 반환 될 가능성이 있을경우 지금은 Optional.of로 감싼상태로 반환
     }
 

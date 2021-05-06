@@ -1,20 +1,11 @@
-package com.test.spring.domain;
+package com.test.spring.controller;
 
-public class Member {
-
-    private String id;
+public class MemberForm {
     private String name;
     private String password;
-    private String country;
+    private String id;
+    private String contry;
     private String email;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -32,12 +23,20 @@ public class Member {
         this.password = password;
     }
 
-    public String getCountry() {
-        return country;
+    public String getId() {
+        return id;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getContry() {
+        return contry;
+    }
+
+    public void setContry(String contry) {
+        this.contry = contry;
     }
 
     public String getEmail() {
