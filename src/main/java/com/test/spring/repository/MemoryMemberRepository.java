@@ -1,7 +1,6 @@
 package com.test.spring.repository;
 
 import com.test.spring.domain.Member;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
@@ -12,11 +11,11 @@ public class MemoryMemberRepository implements MemberRepository {
     private  static long sequence =0L;
 
     @Override
-    public Member save(Member member) {
+    public void save(Member member) {
         sequence++;
         member.setId("kkhq"+sequence);
         store.put(member.getId(),member);
-        return member;
+
     }
 
     @Override

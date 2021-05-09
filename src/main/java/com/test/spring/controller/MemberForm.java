@@ -4,7 +4,7 @@ public class MemberForm {
     private String name;
     private String password;
     private String id;
-    private String contry;
+    private String country;
     private String email;
 
     public String getName() {
@@ -31,12 +31,12 @@ public class MemberForm {
         this.id = id;
     }
 
-    public String getContry() {
-        return contry;
+    public String getCountry() {
+        return country;
     }
 
-    public void setContry(String contry) {
-        this.contry = contry;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getEmail() {

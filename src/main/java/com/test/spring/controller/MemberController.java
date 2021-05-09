@@ -33,10 +33,11 @@ public class MemberController {
         member.setName(form.getName());
         member.setId(form.getId());
         member.setPassword(form.getPassword());
-        member.setCountry(form.getContry());
+        member.setCountry(form.getCountry());
         member.setEmail(form.getEmail());
 
         memberService.join(member);
+
         return "redirect:/";
     }
 

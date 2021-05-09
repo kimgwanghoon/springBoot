@@ -2,9 +2,7 @@ package com.test.spring.service;
 
 import com.test.spring.domain.Member;
 import com.test.spring.repository.MemberRepository;
-import com.test.spring.repository.MemoryMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,24 +20,25 @@ public class MemberService {
     /**
      * 회원 가입
      */
-    public String join(Member member){
+    public Boolean join(Member member){
+
         //같은 이름이 있는 중복 회원X
-        validateDuplicateMember(member);    //중복회원검증
+        Boolean schmemberresult = validateDuplicateMember(member);    //중복회원검증
         memberRepository.save(member);
-        return member.getId();
+
+        return schmemberresult;
     }
 
-    private void validateDuplicateMember(Member member) {
+    private Boolean validateDuplicateMember(Member member) {
+        boolean result;
+        result=memberRepository.findById(member.getId()).isPresent();
+        return result;
+
         //권장하는 사용방식
-        memberRepository.findByName(member.getName())
+        /*memberRepository.findById(member.getId())
                 .ifPresent(m ->   {       // null 이 아니라 값이있으면 아래 로직동작하는 구문, Optional 라서 가능
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
-                });
-        /*Optional<Member> result = memberRepository.findByName(member.getName());
-
-        result.ifPresent(m ->   {       // null 이 아니라 값이있으면 아래 로직동작하는 구문, Optional 라서 가능
-                throw new IllegalStateException("이미 존재하는 회원입니다.");
-        });*/
+                });*/
     }
 
     /**

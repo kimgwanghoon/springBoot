@@ -1,32 +1,24 @@
 package com.test.spring.service;
 
 import com.test.spring.domain.Member;
+import com.test.spring.repository.MemberRepository;
 import com.test.spring.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+@Transactional
+class MemberServiceIntTest {
 
-class MemberServiceTest {
-
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
-
-    @BeforeEach
-    public void beforEach(){    //같은 메모리 공간을 사용하도록 구성
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    public void afterEach(){        //테스트가 끝날때마다 공용데이터를 제거
-        memberRepository.clearStore();
-    }
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
 
     @Test
     void join() {
@@ -51,7 +43,7 @@ class MemberServiceTest {
         member2.setName("spring");
 
         //when
-        memberService.join(member1);
+        memberService.join(member2);
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
         //assertThrows(IllegalStateException.class, () -> memberService.join(member2));
 
@@ -67,11 +59,4 @@ class MemberServiceTest {
 */
     }
 
-    @Test
-    void findMembers() {
-    }
-
-    @Test
-    void findOne() {
-    }
 }

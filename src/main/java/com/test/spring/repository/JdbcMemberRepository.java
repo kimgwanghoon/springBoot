@@ -1,8 +1,6 @@
 package com.test.spring.repository;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.test.spring.domain.Member;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
@@ -20,37 +18,31 @@ public class JdbcMemberRepository implements MemberRepository{
     }
 
     @Override
-    public Member save(Member member) {
+    public void save(Member member) {
         String sql = "insert into user(userID,userPassword,userName,userCountry,userEmail) values(?,?,?,?,?)";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;  //결과를 받는 변수
 
+        if(member.getId() !=null && member.getPassword() !=null && member.getName() !=null && member.getCountry() !=null) {
+            try {
+                conn = getConnection();
+                pstmt = conn.prepareStatement(sql);    //RETURN_GENERATED_KEYS
 
-        try{
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);    //RETURN_GENERATED_KEYS
+                pstmt.setString(1, member.getId());
+                pstmt.setString(2, member.getPassword());
+                pstmt.setString(3, member.getName());
+                pstmt.setString(4, member.getCountry());
+                pstmt.setString(5, member.getEmail());
 
-            pstmt.setString(1,member.getId());
-            pstmt.setString(2,member.getPassword());
-            pstmt.setString(3,member.getName());
-            pstmt.setString(4,member.getCountry());
-            pstmt.setString(5,member.getEmail());
+                pstmt.executeUpdate();  //db에 실제쿼리날리는 부분
 
-            pstmt.executeUpdate();  //db에 실제쿼리날리는 부분
-            rs = pstmt.getGeneratedKeys();
-
-            if(rs.next()){
-                member.setId(rs.getString(1));
-            }else{
-                throw new SQLException("id 조회 실패");
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            } finally {
+                close(conn, pstmt, rs);
             }
-            return member;
-        }catch (Exception e){
-            throw new IllegalStateException(e);
-        }finally {
-            close(conn, pstmt, rs);
         }
 
     }
@@ -74,9 +66,6 @@ public class JdbcMemberRepository implements MemberRepository{
             if(rs.next()){
                 Member member = new Member();
                 member.setId(rs.getString("userID"));
-                member.setId(rs.getString("userName"));
-                member.setId(rs.getString("userCountry"));
-                member.setId(rs.getString("userEmail"));
                 return Optional.of(member);
             }else{
                 return Optional.empty();
@@ -101,7 +90,6 @@ public class JdbcMemberRepository implements MemberRepository{
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;  //결과를 받는 변수
-
 
         try{
             conn = getConnection();
